@@ -148,6 +148,49 @@
             transform: translateY(-5px);
         }
 
+        /* नयाँ थपिएको: Clickable Expandable Cards CSS */
+        .card.expandable {
+            cursor: pointer;
+        }
+        .card.expandable .click-hint {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            transition: 0.3s;
+        }
+        .card.expandable:hover .click-hint {
+            color: #ffd700;
+        }
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            text-align: left;
+            margin-top: 0;
+        }
+        .card.active .card-content {
+            margin-top: 20px;
+            border-top: 1px dashed #ffd700;
+            padding-top: 15px;
+        }
+        .card-content ul {
+            list-style: none;
+            padding-left: 10px;
+        }
+        .card-content li {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-content li i {
+            font-size: 0.9rem;
+            color: #ffd700;
+            margin-bottom: 0;
+        }
+
         /* सफल्ड अटो-स्लाइडर स्टाइलिङ */
         .slider-wrapper {
             position: relative;
@@ -180,6 +223,84 @@
             display: block;
         }
 
+        /* नयाँ थपिएको: News Section CSS */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .news-item {
+            background: #141414;
+            border: 1px solid #252525;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .news-header {
+            background: #1a1a1a;
+            padding: 18px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+        .news-header:hover {
+            background: #222;
+            border-left: 4px solid #ffd700;
+        }
+        .news-header h3 {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+        .news-header .toggle-icon {
+            color: #ffd700;
+            transition: transform 0.3s;
+        }
+        .news-item.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+        .news-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #0f0f0f;
+            padding: 0 20px;
+        }
+        .news-item.active .news-body {
+            padding: 20px;
+            border-top: 1px solid #252525;
+        }
+        .news-date {
+            font-size: 0.8rem;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        .news-text {
+            color: #ddd;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .news-ref-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 8px 18px;
+            background: #ffd700;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+        .news-ref-btn:hover {
+            background: #fff;
+        }
+
         /* कन्ट्याक्ट */
         .contact-container {
             display: grid;
@@ -199,6 +320,10 @@
             font-size: 2rem;
             color: #ffd700;
             margin-bottom: 10px;
+        }
+
+        .contact-box p {
+            color: #fff;
         }
 
         .contact-box a {
@@ -248,6 +373,9 @@
             .portfolio-slide img {
                 height: 300px;
             }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
@@ -261,134 +389,3 @@
         <h1>ROCK-C Media Solution</h1>
         <p>Information • Entertainment • Digital Services</p>
         <a href="#contact" class="cta-btn">Contact Us</a>
-    </section>
-
-    <section class="section">
-        <h2>About Us</h2>
-        <p class="about-text">
-            ROCK-C Media Solution is a professional media and digital agency
-            providing graphic design, video editing, digital marketing,
-            news content creation, website development and social media services.
-        </p>
-    </section>
-
-    <section class="section">
-        <h2>Our Services</h2>
-        <div class="cards">
-            <div class="card">
-                <i class="fa-solid fa-palette"></i>
-                <h3>Graphic Design</h3>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-video"></i>
-                <h3>Video Editing</h3>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-newspaper"></i>
-                <h3>News & Media</h3>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-code"></i>
-                <h3>Website Development</h3>
-            </div>
-            <div class="card">
-                <i class="fa-solid fa-bullhorn"></i>
-                <h3>Digital Marketing</h3>
-            </div>
-            <div class="card">
-                <i class="fa-brands fa-youtube"></i>
-                <h3>YouTube Branding</h3>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <h2>Our Work Portfolio</h2>
-        <div class="slider-wrapper">
-            <div class="portfolio-slider" id="auto-gallery">
-                <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Shuffling and loading projects...</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="contact">
-        <h2>Contact Us</h2>
-        <div class="contact-container">
-            <div class="contact-box"><i class="fa-solid fa-phone"></i><p>+977 9811661522</p></div>
-            <div class="contact-box"><i class="fa-solid fa-envelope"></i><p>rockcmediasolution@gmail.com</p></div>
-            <div class="contact-box"><i class="fa-brands fa-facebook"></i><br><a href="https://www.facebook.com/Rockcmedia/photos_albums" target="_blank">Visit Facebook</a></div>
-            <div class="contact-box"><i class="fa-brands fa-youtube"></i><br><a href="https://www.youtube.com/@Rock-CMediaSolution" target="_blank">Visit YouTube</a></div>
-        </div>
-    </section>
-
-    <footer>
-        <p>© 2026 ROCK-C Media Solution. All Rights Reserved.</p>
-    </footer>
-
-    <a href="https://wa.me/9779811661522" class="whatsapp-float" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
-    <script>
-        const repoOwner = 'rockcmediasolution'; 
-        const repoName = 'rock-cmediasolution'; 
-        const folderName = 'our-work-portfolio/our-work-portfolio'; 
-        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderName}`;
-
-        async function fetchGallery() {
-            const galleryDiv = document.getElementById('auto-gallery');
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error("Folder not found");
-                const files = await response.json();
-                
-                const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.gif'];
-                
-                // १. पहिले इमेज फाइलहरू मात्र फिल्टर गरेर एउटा एरे (List) मा राख्ने
-                let imageFiles = files.filter(file => imageExtensions.some(ext => file.name.toLowerCase().endsWith(ext)));
-
-                // २. जादुमयी फिट्ने काम (Fisher-Yates Shuffle Algorithm)
-                for (let i = imageFiles.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [imageFiles[i], imageFiles[j]] = [imageFiles[j], imageFiles[i]];
-                }
-                
-                // ३. अब र्‍यान्डम भइसकेको लिस्टलाई स्लाइडरमा हाल्ने
-                let html = '';
-                imageFiles.forEach(file => {
-                    html += `
-                        <div class="portfolio-slide">
-                            <img src="${file.path}" alt="Portfolio Project">
-                        </div>
-                    `;
-                });
-
-                if(html === '') {
-                    galleryDiv.innerHTML = '<p class="loading-text">No images found in the folder yet!</p>';
-                } else {
-                    galleryDiv.innerHTML = html;
-                    startAutoSlider(); 
-                }
-            } catch (error) {
-                console.error(error);
-                galleryDiv.innerHTML = '<p class="loading-text" style="color:red;">Error loading portfolio slider.</p>';
-            }
-        }
-
-        function startAutoSlider() {
-            const slider = document.getElementById('auto-gallery');
-            const slides = document.querySelectorAll('.portfolio-slide');
-            if (slides.length <= 1) return; 
-
-            let currentIndex = 0;
-            
-            setInterval(() => {
-                currentIndex = (currentIndex + 1) % slides.length;
-                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }, 3000); 
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchGallery);
-    </script>
-</body>
-</html>
