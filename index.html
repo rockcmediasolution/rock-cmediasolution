@@ -41,7 +41,7 @@
             height: auto;
         }
 
-        /* हिरो सेक्सन (ब्यानर बाहिरै भएकोले यहाँ 'url' मा सिधै नाम राखिएको छ) */
+        /* हिरो सेक्सन */
         .hero {
             padding: 100px 20px;
             text-align: center;
@@ -148,43 +148,36 @@
             transform: translateY(-5px);
         }
 
-        /* पोर्टफोलियो ग्रिड */
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .portfolio-item {
-            background: #141414;
-            border-radius: 10px;
+        /* नयाँ अटो-स्लाइडर स्टाइलिङ (नाम हटाइएको र प्रिमियम लुक) */
+        .slider-wrapper {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
             overflow: hidden;
-            border: 1px solid #252525;
-            transition: 0.3s;
-        }
-
-        .portfolio-item img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .portfolio-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .portfolio-info {
-            padding: 15px;
-            text-align: center;
+            border-radius: 15px;
+            border: 2px solid #ffd700;
             background: #141414;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.05);
         }
 
-        .portfolio-info h4 {
-            color: #ffd700;
-            font-size: 1rem;
-            text-transform: capitalize;
+        .portfolio-slider {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .portfolio-slide {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        .portfolio-slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: contain; /* तस्विरको ओरिजिनल साइज नमिल्किने गरी टक्क बस्छ */
+            display: block;
         }
 
         /* कन्ट्याक्ट */
@@ -247,8 +240,15 @@
         .loading-text {
             text-align: center;
             color: #aaa;
-            grid-column: 1 / -1;
-            padding: 20px;
+            padding: 50px;
+            width: 100%;
+        }
+
+        /* मोबाइल स्क्रीनको लागि स्लाइडर हाइट मिलाइएको */
+        @media(max-width: 768px) {
+            .portfolio-slide img {
+                height: 300px;
+            }
         }
     </style>
 </head>
@@ -305,8 +305,10 @@
 
     <section class="section">
         <h2>Our Work Portfolio</h2>
-        <div class="portfolio-grid" id="auto-gallery">
-            <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading latest projects...</p>
+        <div class="slider-wrapper">
+            <div class="portfolio-slider" id="auto-gallery">
+                <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading slider...</p>
+            </div>
         </div>
     </section>
 
@@ -331,7 +333,7 @@
     <script>
         const repoOwner = 'rockcmediasolution'; 
         const repoName = 'rock-cmediasolution'; 
-        const folderName = 'our-work-portfolio/our-work-portfolio'; // यहाँ डबल फोल्डर मिलाइयो!
+        const folderName = 'our-work-portfolio/our-work-portfolio'; 
         const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderName}`;
 
         async function fetchGallery() {
@@ -347,16 +349,11 @@
                 files.forEach(file => {
                     const isImage = imageExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
                     
+                    // इमेज मात्र लोड गर्ने र कुनै नाम नदेखाउने गरी मिलाइएको
                     if (isImage) {
-                        // फाइलको नामबाट .png हटाएर राम्रो क्याप्सन बनाउने
-                        let cleanName = file.name.replace(/\.[^/.]+$/, "").replace(/%20|_|-/g, " ");
-                        
                         html += `
-                            <div class="portfolio-item">
-                                <img src="${file.path}" alt="${cleanName}">
-                                <div class="portfolio-info">
-                                    <h4>${cleanName}</h4>
-                                </div>
+                            <div class="portfolio-slide">
+                                <img src="${file.path}" alt="Portfolio Project">
                             </div>
                         `;
                     }
@@ -366,11 +363,26 @@
                     galleryDiv.innerHTML = '<p class="loading-text">No images found in the folder yet!</p>';
                 } else {
                     galleryDiv.innerHTML = html;
+                    startAutoSlider(); // स्लाइडर सुचारु गर्ने
                 }
             } catch (error) {
                 console.error(error);
-                galleryDiv.innerHTML = '<p class="loading-text" style="color:red;">Error loading gallery. Please check back in a moment.</p>';
+                galleryDiv.innerHTML = '<p class="loading-text" style="color:red;">Error loading portfolio slider.</p>';
             }
+        }
+
+        // स्लाइड गुडाउने एनिमेसन फंक्शन
+        function startAutoSlider() {
+            const slider = document.getElementById('auto-gallery');
+            const slides = document.querySelectorAll('.portfolio-slide');
+            if (slides.length <= 1) return; // यदि एउटा मात्र फोटो छ भने स्लाइड नगर्ने
+
+            let currentIndex = 0;
+            
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % slides.length;
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }, 3000); // हरेक ३ सेकेन्डमा फोटो आफैं बदलिन्छ (३००० मिलिसेकेन्ड)
         }
 
         document.addEventListener('DOMContentLoaded', fetchGallery);
