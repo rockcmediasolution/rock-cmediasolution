@@ -1,0 +1,162 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#080808;
+color:white;
+line-height:1.7;
+}
+
+.container{
+width:90%;
+max-width:1200px;
+margin:auto;
+}
+
+header{
+background:#000;
+border-bottom:2px solid #d4a45a;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 0;
+}
+
+.logo img{
+height:70px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:500;
+}
+
+nav a:hover{
+color:#d4a45a;
+}
+
+.hero{
+height:90vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+background:
+linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
+url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1600&q=80');
+background-size:cover;
+background-position:center;
+}
+
+.hero h1{
+font-size:4rem;
+color:#d4a45a;
+}
+
+.hero p{
+font-size:1.2rem;
+margin-top:15px;
+}
+
+.buttons{
+margin-top:30px;
+}
+
+.btn,
+.btn-outline{
+padding:12px 25px;
+text-decoration:none;
+margin:10px;
+border-radius:5px;
+font-weight:600;
+}
+
+.btn{
+background:#d4a45a;
+color:black;
+}
+
+.btn-outline{
+border:2px solid #d4a45a;
+color:#d4a45a;
+}
+
+.section{
+padding:80px 0;
+}
+
+.section h2{
+text-align:center;
+margin-bottom:40px;
+color:#d4a45a;
+}
+
+.dark{
+background:#111;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.card{
+background:#1a1a1a;
+padding:25px;
+border-radius:10px;
+border:1px solid #333;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+border-color:#d4a45a;
+}
+
+footer{
+text-align:center;
+padding:25px;
+background:#000;
+border-top:2px solid #d4a45a;
+}
+
+.whatsapp{
+position:fixed;
+right:20px;
+bottom:20px;
+background:#25D366;
+color:white;
+padding:14px 18px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
+}
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:2.5rem;
+}
+
+nav{
+display:none;
+}
+
+.logo img{
+height:55px;
+}
+
+}
