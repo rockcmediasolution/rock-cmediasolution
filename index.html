@@ -148,7 +148,7 @@
             transform: translateY(-5px);
         }
 
-        /* नयाँ अटो-स्लाइडर स्टाइलिङ (नाम हटाइएको र प्रिमियम लुक) */
+        /* सफल्ड अटो-स्लाइडर स्टाइलिङ */
         .slider-wrapper {
             position: relative;
             max-width: 900px;
@@ -176,7 +176,7 @@
         .portfolio-slide img {
             width: 100%;
             height: 500px;
-            object-fit: contain; /* तस्विरको ओरिजिनल साइज नमिल्किने गरी टक्क बस्छ */
+            object-fit: contain;
             display: block;
         }
 
@@ -244,7 +244,6 @@
             width: 100%;
         }
 
-        /* मोबाइल स्क्रीनको लागि स्लाइडर हाइट मिलाइएको */
         @media(max-width: 768px) {
             .portfolio-slide img {
                 height: 300px;
@@ -307,7 +306,7 @@
         <h2>Our Work Portfolio</h2>
         <div class="slider-wrapper">
             <div class="portfolio-slider" id="auto-gallery">
-                <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading slider...</p>
+                <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Shuffling and loading projects...</p>
             </div>
         </div>
     </section>
@@ -343,27 +342,32 @@
                 if (!response.ok) throw new Error("Folder not found");
                 const files = await response.json();
                 
-                let html = '';
                 const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.gif'];
+                
+                // १. पहिले इमेज फाइलहरू मात्र फिल्टर गरेर एउटा एरे (List) मा राख्ने
+                let imageFiles = files.filter(file => imageExtensions.some(ext => file.name.toLowerCase().endsWith(ext)));
 
-                files.forEach(file => {
-                    const isImage = imageExtensions.some(ext => file.name.toLowerCase().endsWith(ext));
-                    
-                    // इमेज मात्र लोड गर्ने र कुनै नाम नदेखाउने गरी मिलाइएको
-                    if (isImage) {
-                        html += `
-                            <div class="portfolio-slide">
-                                <img src="${file.path}" alt="Portfolio Project">
-                            </div>
-                        `;
-                    }
+                // २. जादुमयी फिट्ने काम (Fisher-Yates Shuffle Algorithm)
+                for (let i = imageFiles.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [imageFiles[i], imageFiles[j]] = [imageFiles[j], imageFiles[i]];
+                }
+                
+                // ३. अब र्‍यान्डम भइसकेको लिस्टलाई स्लाइडरमा हाल्ने
+                let html = '';
+                imageFiles.forEach(file => {
+                    html += `
+                        <div class="portfolio-slide">
+                            <img src="${file.path}" alt="Portfolio Project">
+                        </div>
+                    `;
                 });
 
                 if(html === '') {
                     galleryDiv.innerHTML = '<p class="loading-text">No images found in the folder yet!</p>';
                 } else {
                     galleryDiv.innerHTML = html;
-                    startAutoSlider(); // स्लाइडर सुचारु गर्ने
+                    startAutoSlider(); 
                 }
             } catch (error) {
                 console.error(error);
@@ -371,18 +375,17 @@
             }
         }
 
-        // स्लाइड गुडाउने एनिमेसन फंक्शन
         function startAutoSlider() {
             const slider = document.getElementById('auto-gallery');
             const slides = document.querySelectorAll('.portfolio-slide');
-            if (slides.length <= 1) return; // यदि एउटा मात्र फोटो छ भने स्लाइड नगर्ने
+            if (slides.length <= 1) return; 
 
             let currentIndex = 0;
             
             setInterval(() => {
                 currentIndex = (currentIndex + 1) % slides.length;
                 slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }, 3000); // हरेक ३ सेकेन्डमा फोटो आफैं बदलिन्छ (३००० मिलिसेकेन्ड)
+            }, 3000); 
         }
 
         document.addEventListener('DOMContentLoaded', fetchGallery);
