@@ -6,6 +6,9 @@
     <title>News Portal - ROCK-C Media</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
         body { background: #0b0b0b; color: #f1f1f1; line-height: 1.6; }
@@ -14,11 +17,9 @@
         .back-btn { display: inline-block; margin: 20px; padding: 10px 20px; background: #222; color: #ffd700; text-decoration: none; border-radius: 5px; border: 1px solid #ffd700; transition: 0.3s; }
         .back-btn:hover { background: #ffd700; color: #000; }
         
-        /* दुई कोलम लेआउट: समाचार र फेसबुक */
         .portal-container { max-width: 1200px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
         .news-list-section h1 { color: #ffd700; margin-bottom: 25px; font-size: 2rem; border-left: 4px solid #ffd700; padding-left: 10px; }
         
-        /* हेडलाइन कार्ड स्टाइल */
         .headline-item { background: #141414; border: 1px solid #252525; border-radius: 8px; padding: 15px 20px; margin-bottom: 15px; transition: 0.3s; cursor: pointer; }
         .headline-item:hover { border-color: #ffd700; transform: translateX(5px); }
         .headline-date { color: #888; font-size: 0.85rem; display: block; margin-bottom: 5px; }
@@ -66,38 +67,44 @@
 
     <script>
         const SPREADSHEET_ID = '1fzL5DzEemQ_BTQgkHFLaCG-7ZjQlEFknZw5SN44gm-Q';
-        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+        // नयाँ सुरक्षित CSV लिंक फर्म्याट
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv`;
 
-        async function loadHeadlines() {
+        function loadHeadlines() {
             const container = document.getElementById('headlines-container');
-            try {
-                const response = await fetch(url);
-                const text = await response.text();
-                const json = JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1));
-                const rows = json.table.rows;
-                let htmlContent = '';
+            
+            Papa.parse(url, {
+                download: true,
+                header: false,
+                complete: function(results) {
+                    const rows = results.data;
+                    let htmlContent = '';
 
-                // उल्टोबाट लुप चलाउने ताकि नयाँ माथि आओस्
-                for (let i = rows.length - 1; i >= 1; i--) {
-                    const row = rows[i].c;
-                    const date = row[0] ? row[0].v : '';
-                    const title = row[1] ? row[1].v : '';
+                    // नयाँ न्युज सधैँ माथि देखाउन रिभर्स (Reverse) लुप चलाउने
+                    for (let i = rows.length - 1; i >= 1; i--) {
+                        const row = rows[i];
+                        if (!row || row.length < 2) continue;
 
-                    if (!date && !title) continue;
+                        const date = row[0] ? row[0].trim() : '';
+                        const title = row[1] ? row[1].trim() : '';
 
-                    // क्लिक गर्दा news-detail.html मा Row ID (i) लिएर जाने लिंक
-                    htmlContent += `
-                        <div class="headline-item" onclick="window.location.href='news-detail.html?id=${i}'">
-                            <span class="headline-date"><i class="fa-regular fa-clock"></i> ${date}</span>
-                            <h2>${title}</h2>
-                        </div>
-                    `;
+                        // हेडलाइन खाली छ भने नदेखाउने
+                        if (!title) continue;
+
+                        htmlContent += `
+                            <div class="headline-item" onclick="window.location.href='news-detail.html?id=${i}'">
+                                <span class="headline-date"><i class="fa-regular fa-clock"></i> ${date}</span>
+                                <h2>${title}</h2>
+                            </div>
+                        `;
+                    }
+                    container.innerHTML = htmlContent || '<p class="loading-text">अहिले कुनै समाचार उपलब्ध छैन।</p>';
+                },
+                error: function(err) {
+                    console.error(err);
+                    container.innerHTML = '<p class="loading-text" style="color:red;">समाचार लोड गर्न सकिएन।</p>';
                 }
-                container.innerHTML = htmlContent || '<p class="loading-text">अहिले कुनै समाचार उपलब्ध छैन।</p>';
-            } catch (error) {
-                console.error(error);
-                container.innerHTML = '<p class="loading-text" style="color:red;">समाचार लोड गर्न सकिएन।</p>';
-            }
+            });
         }
         document.addEventListener('DOMContentLoaded', loadHeadlines);
     </script>
