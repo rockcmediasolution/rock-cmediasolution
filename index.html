@@ -9,7 +9,326 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="./style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+
+        body {
+            background: #0b0b0b;
+            color: #f1f1f1;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid #ffd700;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            max-width: 180px;
+            width: 100%;
+            height: auto;
+        }
+
+        .hero {
+            padding: 120px 20px;
+            text-align: center;
+            background: linear-gradient(rgba(11, 11, 11, 0.85), rgba(11, 11, 11, 0.85)), url('V%201.1%20FINAL%20BANNER%2015%20AUG%202026.png');
+            background-size: cover;
+            background-position: center;
+            border-bottom: 1px solid #222;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: #ffd700;
+            font-weight: 700;
+            text-shadow: 0px 4px 10px rgba(255, 215, 0, 0.3);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            margin-top: 15px;
+            font-size: 1.3rem;
+            color: #ccc;
+            letter-spacing: 1px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: #ffd700;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 25px;
+            transition: 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background: #fff;
+            transform: scale(1.05);
+        }
+
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #ffd700;
+            font-size: 2.2rem;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #ffd700;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .about-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: #ddd;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: #141414;
+            padding: 30px 20px;
+            border-radius: 12px;
+            border: 1px solid #252525;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .card i {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+            color: #fff;
+        }
+
+        .card:hover {
+            border-color: #ffd700;
+            transform: translateY(-5px);
+        }
+
+        .card.expandable {
+            cursor: pointer;
+        }
+
+        .card.expandable .click-hint {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            transition: 0.3s;
+        }
+
+        .card.expandable:hover .click-hint {
+            color: #ffd700;
+        }
+
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            text-align: left;
+            margin-top: 0;
+        }
+
+        .card.active .card-content {
+            margin-top: 20px;
+            border-top: 1px dashed #ffd700;
+            padding-top: 15px;
+        }
+
+        .card-content ul {
+            list-style: none;
+            padding-left: 5px;
+        }
+
+        .card-content li {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-content li i {
+            font-size: 0.9rem;
+            color: #ffd700;
+            margin-bottom: 0;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 15px;
+            border: 2px solid #ffd700;
+            background: #141414;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.05);
+        }
+
+        .portfolio-slider {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .portfolio-slide {
+            min-width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        .portfolio-slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .fb-container {
+            display: flex;
+            justify-content: center;
+            background: #141414;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #252525;
+            max-width: 500px;
+            margin: 0 auto;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-box {
+            background: #141414;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #252525;
+            word-wrap: break-word;
+        }
+
+        .contact-box i {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .contact-box p {
+            color: #fff;
+        }
+
+        .contact-box a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .contact-box a:hover {
+            color: #ffd700;
+        }
+
+        footer {
+            background: #000;
+            text-align: center;
+            padding: 25px;
+            border-top: 2px solid #ffd700;
+            margin-top: 60px;
+            color: #888;
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            z-index: 100;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .loading-text {
+            text-align: center;
+            color: #aaa;
+            padding: 50px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 10px; }
+            .logo { max-width: 140px; }
+            .section { padding: 45px 15px; }
+            .section h2 { font-size: 1.8rem; margin-bottom: 25px; }
+            .hero { padding: 70px 15px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1rem; }
+            .about-text { font-size: 1rem; text-align: justify; }
+            .portfolio-slide img { height: 320px; }
+            .cards { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+            .card { padding: 20px 15px; }
+            .whatsapp-float { width: 50px; height: 50px; font-size: 24px; bottom: 20px; right: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 1.8rem; }
+            .portfolio-slide img { height: 240px; }
+            .fb-container { padding: 5px; }
+        }
+    </style>
 </head>
 <body>
 
@@ -168,7 +487,6 @@
                 const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.gif'];
                 let imageFiles = files.filter(file => imageExtensions.some(ext => file.name.toLowerCase().endsWith(ext)));
 
-                // Fisher-Yates Shuffle Algorithm
                 for (let i = imageFiles.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [imageFiles[i], imageFiles[j]] = [imageFiles[j], imageFiles[i]];
