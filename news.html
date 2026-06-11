@@ -6,31 +6,69 @@
     <title>News Portal - ROCK-C Media</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
-        body { background: #0b0b0b; color: #f1f1f1; line-height: 1.6; }
-        header { background: rgba(0, 0, 0, 0.9); padding: 15px; text-align: center; border-bottom: 2px solid #ffd700; position: sticky; top: 0; z-index: 100; }
-        .logo { max-width: 150px; width: 100%; height: auto; }
-        .back-btn { display: inline-block; margin: 20px; padding: 10px 20px; background: #222; color: #ffd700; text-decoration: none; border-radius: 5px; border: 1px solid #ffd700; transition: 0.3s; }
+        /* 🎨 CSS Variables: डिफल्टमा Light Mode सेट गरिएको छ */
+        :root {
+            --bg-color: #f5f6f8;
+            --text-color: #1a1a1a;
+            --card-bg: #ffffff;
+            --card-border: #e0e0e0;
+            --text-muted: #666666;
+            --header-bg: #000000;
+            --headline-hover: #ffd700;
+        }
+
+        /* 🌙 Dark Mode लागू हुँदा बदलिने रङहरू */
+        body.dark-mode {
+            --bg-color: #0b0b0b;
+            --text-color: #f1f1f1;
+            --card-bg: #141414;
+            --card-border: #252525;
+            --text-muted: #888888;
+            --header-bg: #111111;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; transition: background 0.3s, color 0.3s; }
+        body { background: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        
+        header { 
+            background: var(--header-bg); padding: 15px; 
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid #ffd700; position: sticky; top: 0; z-index: 100;
+            padding: 15px 40px;
+        }
+        .logo { max-width: 140px; width: 100%; height: auto; }
+
+        /* थिम चेन्ज गर्ने बटन स्टाइल */
+        .theme-toggle-btn {
+            background: #222; color: #ffd700; border: 1px solid #ffd700;
+            padding: 8px 15px; border-radius: 20px; cursor: pointer;
+            font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 8px;
+        }
+        .theme-toggle-btn:hover { background: #ffd700; color: #000; }
+        
+        .back-btn { display: inline-block; margin: 20px 40px; padding: 10px 20px; background: #222; color: #ffd700; text-decoration: none; border-radius: 5px; border: 1px solid #ffd700; transition: 0.3s; }
         .back-btn:hover { background: #ffd700; color: #000; }
         
         .portal-container { max-width: 1200px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
         .news-list-section h1 { color: #ffd700; margin-bottom: 25px; font-size: 2rem; border-left: 4px solid #ffd700; padding-left: 10px; }
         
-        .headline-item { background: #141414; border: 1px solid #252525; border-radius: 8px; padding: 15px 20px; margin-bottom: 15px; transition: 0.3s; cursor: pointer; }
+        /* हेडलाइन कार्ड स्टाइल */
+        .headline-item { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; padding: 20px; margin-bottom: 15px; transition: 0.3s; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .headline-item:hover { border-color: #ffd700; transform: translateX(5px); }
-        .headline-date { color: #888; font-size: 0.85rem; display: block; margin-bottom: 5px; }
-        .headline-item h2 { color: #fff; font-size: 1.3rem; font-weight: 600; }
-        .headline-item h2:hover { color: #ffd700; }
+        .headline-date { color: var(--text-muted); font-size: 0.85rem; display: block; margin-bottom: 5px; }
+        .headline-item h2 { color: var(--text-color); font-size: 1.35rem; font-weight: 600; }
+        .headline-item:hover h2 { color: #ffd700; }
         
         .sidebar-section h3 { color: #ffd700; margin-bottom: 20px; font-size: 1.5rem; }
-        .fb-container { background: #141414; padding: 10px; border-radius: 8px; border: 1px solid #252525; }
+        .fb-container { background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--card-border); }
         .loading-text { text-align: center; color: #ffd700; padding: 30px; }
 
         @media (max-width: 900px) {
+            header { padding: 15px 20px; }
+            .back-btn { margin: 20px; }
             .portal-container { grid-template-columns: 1fr; }
             .fb-container { display: flex; justify-content: center; }
         }
@@ -40,6 +78,9 @@
 
     <header>
         <img src="ROCK C MEDIA SOLUTION NEW LOGO.png" alt="ROCK-C Media Solution" class="logo">
+        <button class="theme-toggle-btn" id="theme-toggle">
+            <i class="fa-solid fa-moon"></i> <span>Dark Mode</span>
+        </button>
     </header>
 
     <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
@@ -67,8 +108,31 @@
 
     <script>
         const SPREADSHEET_ID = '1fzL5DzEemQ_BTQgkHFLaCG-7ZjQlEFknZw5SN44gm-Q';
-        // नयाँ सुरक्षित CSV लिंक फर्म्याट
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv`;
+
+        // 🌗 थिम व्यवस्थापन (Light/Dark Setup)
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = themeToggleBtn.querySelector('i');
+        const themeText = themeToggleBtn.querySelector('span');
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.className = 'fa-solid fa-sun';
+            themeText.innerText = 'Light Mode';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.className = 'fa-solid fa-sun';
+                themeText.innerText = 'Light Mode';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.className = 'fa-solid fa-moon';
+                themeText.innerText = 'Dark Mode';
+            }
+        });
 
         function loadHeadlines() {
             const container = document.getElementById('headlines-container');
@@ -80,7 +144,7 @@
                     const rows = results.data;
                     let htmlContent = '';
 
-                    // नयाँ न्युज सधैँ माथि देखाउन रिभर्स (Reverse) लुप चलाउने
+                    // रिभर्स अर्डरमा हेडलाइनहरू (नयाँ सधैँ माथि)
                     for (let i = rows.length - 1; i >= 1; i--) {
                         const row = rows[i];
                         if (!row || row.length < 2) continue;
@@ -88,7 +152,6 @@
                         const date = row[0] ? row[0].trim() : '';
                         const title = row[1] ? row[1].trim() : '';
 
-                        // हेडलाइन खाली छ भने नदेखाउने
                         if (!title) continue;
 
                         htmlContent += `
