@@ -7,20 +7,53 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* यहाँ अघिकै CSS यथावत राख्नुहोस् */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
         body { background: #0b0b0b; color: #f1f1f1; line-height: 1.6; scroll-behavior: smooth; }
         header { background: rgba(0, 0, 0, 0.9); padding: 15px; text-align: center; border-bottom: 2px solid #ffd700; position: sticky; top: 0; z-index: 100; }
         .logo { max-width: 180px; width: 100%; height: auto; }
+        
         .hero { padding: 120px 20px; text-align: center; background: linear-gradient(rgba(11, 11, 11, 0.85), rgba(11, 11, 11, 0.85)); background-size: cover; background-position: center; border-bottom: 1px solid #222; }
-        .hero h1 { font-size: 3.5rem; color: #ffd700; font-weight: 700; }
-        .section { padding: 80px 20px; max-width: 1200px; margin: auto; }
-        .section h2 { text-align: center; margin-bottom: 40px; color: #ffd700; font-size: 2.2rem; }
+        .hero h1 { font-size: 3.5rem; color: #ffd700; font-weight: 700; margin-bottom: 15px; }
+        .hero p { font-size: 1.2rem; color: #ccc; }
+        
+        .section { padding: 80px 20px; max-width: 1200px; margin: auto; border-bottom: 1px solid #1a1a1a; }
+        .section h2 { text-align: center; margin-bottom: 40px; color: #ffd700; font-size: 2.2rem; position: relative; }
+        .section h2::after { content: ''; display: block; width: 50px; height: 3px; background: #ffd700; margin: 10px auto 0; }
+        
+        /* Our Services Section */
         .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: #141414; padding: 30px 20px; border-radius: 12px; border: 1px solid #252525; text-align: center; transition: 0.3s; }
+        .card { background: #141414; padding: 30px 20px; border-radius: 12px; border: 1px solid #252525; text-align: center; transition: 0.3s; cursor: pointer; }
         .card:hover { border-color: #ffd700; transform: translateY(-5px); }
-        .card-content { max-height: 0; overflow: hidden; transition: 0.3s; text-align: left; }
-        .whatsapp-float { position: fixed; bottom: 25px; right: 25px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .card i { font-size: 2.5rem; color: #ffd700; margin-bottom: 15px; }
+        .card h3 { font-size: 1.4rem; margin-bottom: 10px; color: #fff; }
+        
+        /* Expanding Content Layout */
+        .card-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; text-align: left; color: #aaa; font-size: 0.95rem; }
+        .card.active { border-color: #ffd700; }
+        .card.active .card-content { margin-top: 15px; }
+        
+        /* Portfolio Filter Tabs */
+        .filter-buttons { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .filter-btn { padding: 10px 25px; background: #141414; border: 1px solid #252525; color: #fff; border-radius: 25px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .filter-btn:hover, .filter-btn.active { background: #ffd700; color: #000; border-color: #ffd700; }
+        
+        /* Portfolio Shuffle Layout */
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .portfolio-item { background: #141414; border-radius: 12px; overflow: hidden; border: 1px solid #252525; transition: 0.4s; }
+        .portfolio-item.hide { display: none; }
+        .portfolio-img { width: 100%; height: 200px; background: #222; display: flex; align-items: center; justify-content: center; color: #444; font-size: 3rem; }
+        .portfolio-info { padding: 20px; }
+        .portfolio-info h4 { color: #ffd700; font-size: 1.2rem; margin-bottom: 5px; }
+        .portfolio-info p { color: #aaa; font-size: 0.9rem; }
+        
+        /* Contact Section */
+        .contact-info { text-align: center; font-size: 1.2rem; padding: 40px 0; }
+        .contact-info p { margin-bottom: 15px; color: #ccc; }
+        .contact-info a { color: #ffd700; text-decoration: none; font-weight: bold; border-bottom: 1px dashed #ffd700; }
+        
+        /* Floating Elements */
+        .whatsapp-float { position: fixed; bottom: 95px; right: 25px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; font-size: 2rem; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.3s; }
+        .whatsapp-float:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
@@ -32,15 +65,124 @@
     <section class="hero">
         <h1>ROCK-C Media Solution</h1>
         <p>Information • Entertainment • Digital Services</p>
-        <a href="#contact" class="cta-btn" style="display:inline-block; margin-top:25px; padding:12px 30px; background:#ffd700; color:#000; text-decoration:none; font-weight:bold; border-radius:25px;">Contact Us</a>
+        <a href="#services" class="cta-btn" style="display:inline-block; margin-top:25px; padding:12px 30px; background:#ffd700; color:#000; text-decoration:none; font-weight:bold; border-radius:25px; transition: 0.3s;">Explore Services</a>
     </section>
+
+    <section id="services" class="section">
+        <h2>Our Services</h2>
+        <div class="cards">
+            <div class="card expandable">
+                <i class="fa-solid fa-video"></i>
+                <h3>Video Editing</h3>
+                <div class="card-content">
+                    <p>हामी प्रोफेसनल युट्युब भिडियो, सर्ट्स, रिल्स, विज्ञापन तथा डकुमेन्ट्रीहरू उच्च गुणस्तरमा सम्पादन (Edit) गर्छौँ। थप जानकारीका लागि हामीलाई सम्पर्क गर्नुहोस्।</p>
+                </div>
+            </div>
+            <div class="card expandable">
+                <i class="fa-solid fa-palette"></i>
+                <h3>Graphic Design</h3>
+                <div class="card-content">
+                    <p>ब्रान्डिङ लोगो, सामाजिक सञ्जाल पोष्टर, ब्यानर तथा थम्बनेल डिजाइनका लागि हामीलाई सम्झनुहोस्, जसले तपाईंको व्यापार बढाउन मद्दत गर्दछ।</p>
+                </div>
+            </div>
+            <div class="card expandable">
+                <i class="fa-solid fa-bullhorn"></i>
+                <h3>Digital Marketing</h3>
+                <div class="card-content">
+                    <p>फेसबुक, इन्स्टाग्राम तथा गुगल विज्ञापन मार्फत तपाईंको लक्षित ग्राहक वर्गसम्म पुग्न र व्यापार प्रवर्द्धन गर्न हामी मद्दत गर्दछौँ।</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="section">
+        <h2>Our Work Portfolio</h2>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-target="all">All Works</button>
+            <button class="filter-btn" data-target="video">Video Editing</button>
+            <button class="filter-btn" data-target="design">Graphics Design</button>
+            <button class="filter-btn" data-target="web">Web Services</button>
+        </div>
+
+        <div class="portfolio-grid">
+            <div class="portfolio-item" data-category="video">
+                <div class="portfolio-img"><i class="fa-solid fa-play"></i></div>
+                <div class="portfolio-info">
+                    <h4>YouTube Video Project</h4>
+                    <p>Cinematic editing and color grading.</p>
+                </div>
+            </div>
+            <div class="portfolio-item" data-category="design">
+                <div class="portfolio-img"><i class="fa-solid fa-image"></i></div>
+                <div class="portfolio-info">
+                    <h4>Brand Identity Logo</h4>
+                    <p>Modern typography and vector layouts.</p>
+                </div>
+            </div>
+            <div class="portfolio-item" data-category="web">
+                <div class="portfolio-img"><i class="fa-solid fa-code"></i></div>
+                <div class="portfolio-info">
+                    <h4>Business Website</h4>
+                    <p>Responsive portfolios and landing pages.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <h2>Contact Us</h2>
+        <div class="contact-info">
+            <p><i class="fa-solid fa-envelope" style="color: #ffd700;"></i> Email: <a href="mailto:info@rockcmediasolution.com">info@rockcmediasolution.com</a></p>
+            <p><i class="fa-solid fa-phone" style="color: #ffd700;"></i> Phone: <a href="tel:+9779811661522">+977-9811661522</a></p>
+        </div>
+    </section>
+
+    <a href="https://wa.me/9779811661522" class="whatsapp-float" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <script src="//code.tidio.co/tibg3q6axqmnj7yjnhda8fu8gjxtspem.js" async></script>
 
     <script>
-        // तपाईंको बाँकी JavaScript कोडहरू यहाँ राख्नुहोस्
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("Page Loaded");
+            // १. Service Cards (Accordion) Automation
+            const expandableCards = document.querySelectorAll('.card.expandable');
+            expandableCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.querySelector('.card-content');
+                    if (this.classList.contains('active')) {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    } else {
+                        content.style.maxHeight = "0px";
+                    }
+                });
+            });
+
+            // २. Portfolio Shuffling & Category Filter Logic
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Active class switch
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    const targetCategory = button.getAttribute('data-target');
+
+                    // Filter items
+                    portfolioItems.forEach(item => {
+                        const itemCategory = item.getAttribute('data-category');
+                        if (targetCategory === 'all' || itemCategory === targetCategory) {
+                            item.classList.remove('hide');
+                        } else {
+                            item.classList.add('hide');
+                        }
+                    });
+                });
+            });
         });
     </script>
 </body>
