@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News - ROCK-C Media</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
+        body { background: #0b0b0b; color: #f1f1f1; line-height: 1.6; }
+        
+        header { background: rgba(0, 0, 0, 0.9); padding: 15px; text-align: center; border-bottom: 2px solid #ffd700; position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px); }
+        .logo { max-width: 180px; width: 100%; height: auto; }
+        
+        .container { max-width: 800px; margin: 50px auto; padding: 20px; }
+        .page-title { text-align: center; color: #ffd700; font-size: 2.2rem; margin-bottom: 40px; position: relative; }
+        .page-title::after { content: ''; display: block; width: 60px; height: 3px; background: #ffd700; margin: 10px auto 0; border-radius: 2px; }
+        
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #fff; text-decoration: none; font-size: 1.1rem; transition: 0.3s; }
+        .back-btn:hover { color: #ffd700; }
+        
+        /* News Item Design */
+        .news-item { background: #141414; padding: 25px; border-radius: 12px; border-left: 5px solid #ffd700; margin-bottom: 20px; border-top: 1px solid #252525; border-right: 1px solid #252525; border-bottom: 1px solid #252525; }
+        .news-title { color: #ffd700; font-size: 1.5rem; margin-bottom: 10px; }
+        .news-date { font-size: 0.9rem; color: #888; margin-bottom: 15px; }
+        .news-content { color: #ddd; white-space: pre-wrap; }
+        
+        .loading { text-align: center; padding: 50px; color: #aaa; }
+        
+        @media (max-width: 768px) {
+            .logo { max-width: 140px; }
+            .container { margin: 20px auto; }
+            .news-title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html">
+            <img src="ROCK C MEDIA SOLUTION NEW LOGO.png" alt="ROCK-C Media Solution" class="logo">
+        </a>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+        <h1 class="page-title">Latest News & Updates</h1>
+        
+        <div id="news-container">
+            <p class="loading"><i class="fas fa-spinner fa-spin"></i> Loading news...</p>
+        </div>
+    </div>
+
+    <script>
+        // Fetch news from news.json
+        fetch('news.json')
+            .then(response => {
+                if (!response.ok) throw new Error("news.json not found");
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('news-container');
+                if (data.length === 0) {
+                    container.innerHTML = '<p class="loading">No news available at the moment.</p>';
+                    return;
+                }
+                
+                let html = '';
+                // उल्टो अर्डरमा देखाउन (नयाँ न्युज माथि आउन) reverse() प्रयोग गरिएको छ
+                data.reverse().forEach(news => {
+                    html += `
+                        <div class="news-item">
+                            <h2 class="news-title">${news.title}</h2>
+                            <p class="news-date"><i class="fa-regular fa-calendar"></i> ${news.date}</p>
+                            <div class="news-content">${news.content}</div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            })
+            .catch(error => {
+                console.error("Error loading news:", error);
+                document.getElementById('news-container').innerHTML = '<p style="color:red; text-align:center;">Failed to load news. Make sure news.json exists.</p>';
+            });
+    </script>
+
+</body>
+</html>
