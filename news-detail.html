@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Details - ROCK-C Media</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
+        body { background: #0b0b0b; color: #f1f1f1; line-height: 1.6; }
+        header { background: rgba(0, 0, 0, 0.9); padding: 15px; text-align: center; border-bottom: 2px solid #ffd700; position: sticky; top: 0; z-index: 100; }
+        .logo { max-width: 150px; width: 100%; height: auto; }
+        .back-btn { display: inline-block; margin: 20px; padding: 10px 20px; background: #222; color: #ffd700; text-decoration: none; border-radius: 5px; border: 1px solid #ffd700; transition: 0.3s; }
+        .back-btn:hover { background: #ffd700; color: #000; }
+
+        .detail-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .news-date { color: #888; font-size: 0.9rem; margin-bottom: 10px; display: block; }
+        .detail-container h1 { color: #fff; font-size: 2.2rem; margin-bottom: 20px; line-height: 1.3; }
+        .news-content { color: #ccc; font-size: 1.1rem; margin-bottom: 30px; white-space: pre-wrap; text-align: justify; }
+        
+        .media-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; margin-bottom: 30px; background: #000; border: 1px solid #252525; }
+        .media-container iframe, .media-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+
+        /* यो पनि पढ्नुहोस (Suggestions) Style */
+        .suggestions-section { margin-top: 50px; border-top: 2px solid #ffd700; padding-top: 30px; }
+        .suggestions-section h3 { color: #ffd700; font-size: 1.5rem; margin-bottom: 20px; }
+        .suggested-item { display: block; color: #aaa; text-decoration: none; padding: 10px 0; border-bottom: 1px dashed #222; font-size: 1.1rem; transition: 0.2s; }
+        .suggested-item:hover { color: #ffd700; padding-left: 5px; }
+
+        .loading-text { text-align: center; color: #ffd700; padding: 50px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="ROCK C MEDIA SOLUTION NEW LOGO.png" alt="ROCK-C Media Solution" class="logo">
+    </header>
+
+    <a href="news.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> सबै समाचारहरू</a>
+
+    <main class="detail-container" id="main-content">
+        <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> समाचार लोड हुँदैछ...</p>
+    </main>
+
+    <script>
+        const SPREADSHEET_ID = '1fzL5DzEemQ_BTQgkHFLaCG-7ZjQlEFknZw5SN44gm-Q';
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+
+        // URL बाट समाचारको ID (Row Index) लिने
+        const urlParams = new URLSearchParams(window.location.search);
+        const newsId = parseInt(urlParams.get('id'));
+
+        function getYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        async function loadNewsDetail() {
+            const container = document.getElementById('main-content');
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                const json = JSON.parse(text.slice(text.indexOf('{'), text.lastIndexOf('}') + 1));
+                const rows = json.table.rows;
+
+                // यदि ID मिलेन भने त्रुटि देखाउने
+                if (!newsId || newsId >= rows.length || !rows[newsId]) {
+                    container.innerHTML = '<p class="loading-text" style="color:red;">समाचार भेटिएन।</p>';
+                    return;
+                }
+
+                const currentNews = rows[newsId].c;
+                const date = currentNews[0] ? currentNews[0].v : 'No Date';
+                const title = currentNews[1] ? currentNews[1].v : 'No Title';
+                const desc = currentNews[2] ? currentNews[2].v : '';
+                const mediaLink = currentNews[3] ? currentNews[3].v : '';
+
+                let mediaHtml = '';
+                if (mediaLink) {
+                    const ytId = getYouTubeId(mediaLink);
+                    if (ytId) {
+                        mediaHtml = `<div class="media-container"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>`;
+                    } else {
+                        mediaHtml = `<div class="media-container"><img src="${mediaLink}" alt="News Media"></div>`;
+                    }
+                }
+
+                // "यो पनि पढ्नुहोस" को लागि अन्य ३ वटा हेडलाइन फिल्टर गर्ने
+                let suggestionsHtml = '';
+                let count = 0;
+                for (let i = rows.length - 1; i >= 1; i--) {
+                    if (i === newsId) continue; // अहिले हेरिरहेको समाचार छाड्ने
+                    const row = rows[i].c;
+                    if (row && row[1]) {
+                        suggestionsHtml += `<a href="news-detail.html?id=${i}" class="suggested-item"><i class="fa-solid fa-chevron-right" style="font-size:0.8rem; color:#ffd700;"></i> ${row[1].v}</a>`;
+                        count++;
+                        if (count >= 4) break; // अधिकतम ४ वटा सुझाव देखाउने
+                    }
+                }
+
+                // मुख्य पेजको संरचना निर्माण
+                container.innerHTML = `
+                    <span class="news-date"><i class="fa-regular fa-clock"></i> ${date}</span>
+                    <h1>${title}</h1>
+                    ${mediaHtml}
+                    <div class="news-content">${desc}</div>
+                    
+                    <section class="suggestions-section">
+                        <h3>यो पनि पढ्नुहोस</h3>
+                        ${suggestionsHtml || '<p style="color:#666;">अन्य समाचार उपलब्ध छैन।</p>'}
+                    </section>
+                `;
+
+            } catch (error) {
+                console.error(error);
+                container.innerHTML = '<p class="loading-text" style="color:red;">विवरण लोड गर्दा प्राविधिक त्रुटि भयो।</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadNewsDetail);
+    </script>
+</body>
+</html>
