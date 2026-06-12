@@ -705,3 +705,18 @@
     </script>
 </body>
 </html>
+/* सेयर बटनहरूको स्टाइल */
+.share-article-box {
+    background: #ffffff; border-top: 2px dashed #e2e8f0; border-bottom: 2px dashed #e2e8f0;
+    padding: 20px 0; margin: 30px 0; text-align: center;
+}
+.share-article-box h4 { color: #2c3e50; margin-bottom: 15px; font-size: 1.1rem; }
+.share-buttons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.share-btn {
+    border: none; padding: 10px 20px; border-radius: 5px; font-weight: 600; font-size: 0.95rem;
+    color: white; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s;
+}
+.share-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+.btn-share-fb { background: #1877f2; }
+.btn-share-wa { background: #25d366; }
+.btn-share-copy { background: #475569; }
