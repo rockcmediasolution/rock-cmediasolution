@@ -1,20 +1,104 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>समाचार विवरण - ROCK-C Media</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
+        body { background: #f4f6f9; color: #2c3e50; line-height: 1.6; }
+        
+        header { 
+            background: #ffffff; padding: 15px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+            border-bottom: 3px solid #ffd700; position: sticky; top: 0; z-index: 100;
+        }
+        .header-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .logo { max-width: 140px; width: 100%; height: auto; }
+        .header-title { font-size: 1.5rem; font-weight: 700; color: #111; border-left: 3px solid #ffd700; padding-left: 15px; text-transform: uppercase; }
+
+        .back-btn { display: inline-block; margin: 20px 0; padding: 10px 20px; background: #ffffff; color: #333; text-decoration: none; border-radius: 5px; border: 1px solid #ccc; font-weight: 600; transition: 0.3s; }
+        .back-btn:hover { background: #ffd700; color: #000; border-color: #ffd700; }
+
+        .detail-container { max-width: 850px; margin: 0 auto; padding: 0 20px 50px 20px; }
+        .main-card { background: #ffffff; padding: 30px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        
+        .news-date { color: #7f8c8d; font-size: 0.9rem; margin-bottom: 12px; display: block; font-weight: 500; }
+        .main-card h1 { color: #111; font-size: 2.2rem; margin-bottom: 25px; line-height: 1.4; font-weight: 700; }
+        .news-content { color: #333; font-size: 1.15rem; margin-bottom: 35px; white-space: pre-wrap; text-align: justify; line-height: 1.8; }
+        
+        .media-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 30px; background: #f0f0f0; border: 1px solid #e2e8f0; }
+        .media-container iframe, .media-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+
+        .follow-notice-box { 
+            background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; 
+            padding: 25px 20px; margin: 40px 0; text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .follow-notice-box p { font-weight: 600; color: #334155; margin-bottom: 20px; font-size: 1.05rem; }
+        
+        .social-icons-row { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .social-icon-btn { 
+            display: flex; align-items: center; justify-content: center;
+            width: 48px; height: 48px; border-radius: 50%; 
+            color: #ffffff; text-decoration: none; font-size: 1.4rem; 
+            transition: transform 0.2s, box-shadow 0.2s; 
+        }
+        .social-icon-btn:hover { transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+        
+        .btn-facebook { background: #1877f2; }
+        .btn-whatsapp { background: #25d366; }
+        .btn-email { background: #ea4335; }
+        .btn-youtube { background: #ff0000; }
+
+        .suggestions-section { margin-top: 40px; border-top: 2px solid #e2e8f0; padding-top: 25px; }
+        .suggestions-section h3 { color: #111; font-size: 1.4rem; margin-bottom: 15px; border-left: 4px solid #b8860b; padding-left: 10px; }
+        .suggested-item { display: block; color: #4a5568; text-decoration: none; padding: 12px 0; border-bottom: 1px dashed #e2e8f0; font-size: 1.1rem; font-weight: 500; transition: 0.2s; }
+        .suggested-item:hover { color: #b8860b; padding-left: 8px; background: rgba(0,0,0,0.01); }
+
+        .loading-text { text-align: center; color: #7f8c8d; padding: 50px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <img src="/ROCK C MEDIA SOLUTION NEW LOGO.png" alt="ROCK-C Media" class="logo">
+            <div class="header-title">समाचार शाखा</div>
+        </div>
+    </header>
+
+    <main class="detail-container">
+        <a href="/news.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> सबै हेडलाइनहरू</a>
+        
+        <div class="main-card" id="main-content">
+            <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> समाचार लोड हुँदैछ...</p>
+        </div>
+    </main>
+
+    <script>
         const SPREADSHEET_ID = '1fzL5DzEemQ_BTQgkHFLaCG-7ZjQlEFknZw5SN44gm-Q';
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv`;
 
-        // 🔥 नयाँ जादु: यसले पुरानो (?id=11) र नयाँ (/news/11) दुवै लिङ्कबाट आइडी तान्छ
+        // पुरानो (?id=11) र नयाँ (/news/11) दुवै तरिकाले आइडी तान्ने मजबुत कोड
         const urlParams = new URLSearchParams(window.location.search);
         let idString = urlParams.get('id');
-        
-        // यदि ?id भेटिएन भने, नयाँ छोटो लिङ्कबाट तान्ने
+
         if (!idString) {
             const pathParts = window.location.pathname.split('/');
-            idString = pathParts[pathParts.length - 1]; 
+            const validParts = pathParts.filter(part => part.length > 0);
+            if (validParts.length > 0) {
+                idString = validParts[validParts.length - 1]; 
+            }
         }
         
         const newsId = parseInt(idString);
 
         function getYouTubeId(url) {
+            if (!url) return null;
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
             return (match && match[2].length === 11) ? match[2] : null;
@@ -44,53 +128,4 @@
                     if (mediaLink) {
                         const ytId = getYouTubeId(mediaLink);
                         if (ytId) {
-                            mediaHtml = `<div class="media-container"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>`;
-                        } else {
-                            mediaHtml = `<div class="media-container"><img src="${mediaLink}" alt="News Media"></div>`;
-                        }
-                    }
-
-                    // सुझाव खण्ड (रिभर्स लुप)
-                    let suggestionsHtml = '';
-                    let count = 0;
-                    for (let i = rows.length - 1; i >= 1; i--) {
-                        if (i === newsId) continue;
-                        const row = rows[i];
-                        if (row && row[1] && row[1].trim()) {
-                            // 🔥 यहाँ पनि 'यो पनि पढ्नुहोस' मा नयाँ छोटो लिङ्क (/news/) राखिएको छ 
-                            suggestionsHtml += `<a href="/news/${i}" class="suggested-item"><i class="fa-solid fa-chevron-right" style="font-size:0.7rem; color:#b8860b;"></i> ${row[1].trim()}</a>`;
-                            count++;
-                            if (count >= 4) break; 
-                        }
-                    }
-
-                    container.innerHTML = `
-                        <span class="news-date"><i class="fa-regular fa-clock"></i> ${date}</span>
-                        <h1>${title}</h1>
-                        ${mediaHtml}
-                        <div class="news-content">${desc}</div>
-                        
-                        <div class="follow-notice-box">
-                            <p>सूचना, मनोरञ्जन र डिजिटल सेवाका लागि ROCK C Media Solution लाई Follow गर्न नभुल्नुहोस्।</p>
-                            <div class="social-icons-row">
-                                <a href="https://facebook.com/Rockcmedia" target="_blank" class="social-icon-btn btn-facebook" title="Facebook Page"><i class="fab fa-facebook-f"></i></a>
-                                <a href="https://wa.me/9779811661522" target="_blank" class="social-icon-btn btn-whatsapp" title="WhatsApp Chat"><i class="fab fa-whatsapp"></i></a>
-                                <a href="mailto:rockcmediasolution@gmail.com" class="social-icon-btn btn-email" title="Send Email"><i class="fas fa-envelope"></i></a>
-                                <a href="https://youtube.com/@Rock-CMediaSolution" target="_blank" class="social-icon-btn btn-youtube" title="YouTube Channel"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-
-                        <section class="suggestions-section">
-                            <h3>यो पनि पढ्नुहोस</h3>
-                            ${suggestionsHtml || '<p style="color:#7f8c8d;">अन्य समाचार उपलब्ध छैन।</p>'}
-                        </section>
-                    `;
-                },
-                error: function(err) {
-                    console.error(err);
-                    container.innerHTML = '<p class="loading-text" style="color:red;">विवरण लोड गर्दा प्राविधिक त्रुटि भयो।</p>';
-                }
-            });
-        }
-        document.addEventListener('DOMContentLoaded', loadNewsDetail);
-    </script>
+                            mediaHtml = `<div class="media-container"><iframe src="https://www
