@@ -6,6 +6,7 @@
     <title>समाचार शाखा - ROCK-C Media</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
@@ -38,6 +39,7 @@
         
         .sidebar-section h3 { color: #111; margin-bottom: 20px; font-size: 1.4rem; border-left: 4px solid #3b5998; padding-left: 10px; }
         .fb-container { background: #ffffff; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .loading-text { text-align: center; color: #7f8c8d; padding: 30px; font-size: 1.1rem; }
 
         @media (max-width: 900px) {
             .portal-container { grid-template-columns: 1fr; }
@@ -62,7 +64,8 @@
         <section class="news-list-section">
             <h1>मुख्य समाचारहरू</h1>
             <div id="headlines-container">
-                </div>
+                <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> समाचार लोड हुँदैछ...</p>
+            </div>
         </section>
 
         <aside class="sidebar-section">
@@ -79,52 +82,47 @@
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ne_NP/sdk.js#xfbml=1&version=v17.0"></script>
 
     <script>
-        // =================================================================
-        // नयाँ समाचार थप्ने ठाउँ: सधैँ सबैभन्दा माथि (Top) मा नयाँ ब्लक थप्नुहोस्
-        // =================================================================
-        const newsData = [
-            {
-                date: "२०८३ जेठ ३० गते",
-                title: "खेम सेन्चुरी र पद्मा डाँगीको स्वरमा 'लाइ दिउँ कि जुг जाने माया' सार्वजनिक, भिडियोमा सुरज केसी र उषा उप्रेतीको केमेस्ट्री",
-                link: "news-11.html"
-            },
-            {
-                date: "12/6/2026",
-                title: "गायिका कुमारी चेपाङ र मौसम गुरुङको मौलिक लोक कोसेली 'भए म झसङ्ग' सार्वजनिक",
-                link: "news-10.html"
-            },
-            {
-                date: "12/6/2026",
-                title: "प्रधानमन्त्री बालेन शाहको 'सीमा' अभिव्यक्तिमा हर्क साम्पाङको कडा आपत्ति, रवि लामिछानेलाई काटे खुल्ला पत्र",
-                link: "news-9.html"
-            },
-            {
-                date: "12/6/2026",
-                title: "रोमान्टिक गीत 'हावा चल्यो सिरसिरी' रिलिज",
-                link: "news-7.html"
-            }
-            // पुराना समाचारहरू तल थप्दै जान सकिन्छ...
-        ];
+        const SPREADSHEET_ID = '1fzL5DzEemQ_BTQgkHFLaCG-7ZjQlEFknZw5SN44gm-Q';
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv`;
 
-        // समाचारलाई लिस्टमा देखाउने कोड
-        function displayHeadlines() {
+        function loadHeadlines() {
             const container = document.getElementById('headlines-container');
-            let htmlContent = '';
+            
+            Papa.parse(url, {
+                download: true,
+                header: false,
+                complete: function(results) {
+                    const rows = results.data;
+                    let htmlContent = '';
 
-            newsData.forEach(news => {
-                htmlContent += `
-                    <div class="headline-item" onclick="window.location.href='${news.link}'">
-                        <span class="headline-date"><i class="fa-regular fa-clock"></i> ${news.date}</span>
-                        <h2>${news.title}</h2>
-                    </div>
-                `;
+                    // Google Sheet को २ औं रो (Row 2) बाट समाचार सुरु हुन्छ, त्यसैले i >= 1 राखेको
+                    // यसले नयाँ समाचार (तल्लो रो) लाई सधैँ टपमा देखाउँछ
+                    for (let i = rows.length - 1; i >= 1; i--) {
+                        const row = rows[i];
+                        if (!row || row.length < 2) continue;
+
+                        const date = row[0] ? row[0].trim() : '';
+                        const title = row[1] ? row[1].trim() : '';
+
+                        if (!title) continue;
+
+                        // अटोमेटिक रूपमा लिङ्क 'news/row_number.html' बन्ने फिक्स
+                        htmlContent += `
+                            <div class="headline-item" onclick="window.location.href='news/${i}.html'">
+                                <span class="headline-date"><i class="fa-regular fa-clock"></i> ${date}</span>
+                                <h2>${title}</h2>
+                            </div>
+                        `;
+                    }
+                    container.innerHTML = htmlContent || '<p class="loading-text">अहिले कुनै समाचार उपलब्ध छैन।</p>';
+                },
+                error: function(err) {
+                    console.error(err);
+                    container.innerHTML = '<p class="loading-text" style="color:red;">समाचार लोड गर्न सकिएन।</p>';
+                }
             });
-
-            container.innerHTML = htmlContent || '<p class="loading-text">अहिले कुनै समाचार उपलब्ध छैन।</p>';
         }
-
-        // पेज लोड हुँदा फङ्सन चलाउने
-        document.addEventListener('DOMContentLoaded', displayHeadlines);
+        document.addEventListener('DOMContentLoaded', loadHeadlines);
     </script>
 </body>
 </html>
