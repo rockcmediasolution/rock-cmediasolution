@@ -106,11 +106,18 @@
 
                         const date = row[0] ? row[0].trim() : '';
                         const title = row[1] ? row[1].trim() : '';
+                        
+                        // यो नयाँ लाइन हो (Google Sheet को ५ औं कोलमबाट म्यानुअल लिङ्क तान्ने)
+                        // Array index 4 भनेको Column E हो
+                        const manualLink = (row.length > 4 && row[4]) ? row[4].trim() : '';
 
                         if (!title) continue;
 
+                        // यदि म्यानुअल लिङ्क छ भने त्यो राख्ने, छैन भने पुरानै news-detail.html?id=... राख्ने
+                        const finalLink = manualLink !== '' ? manualLink : `news-detail.html?id=${i}`;
+
                         htmlContent += `
-                            <div class="headline-item" onclick="window.location.href='news-detail.html?id=${i}'">
+                            <div class="headline-item" onclick="window.location.href='${finalLink}'">
                                 <span class="headline-date"><i class="fa-regular fa-clock"></i> ${date}</span>
                                 <h2>${title}</h2>
                             </div>
