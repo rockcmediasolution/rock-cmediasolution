@@ -31,7 +31,7 @@
         .news-content { color: #333; font-size: 1.15rem; margin-bottom: 35px; white-space: pre-wrap; text-align: justify; line-height: 1.8; }
         
         .media-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 30px; background: #f0f0f0; border: 1px solid #e2e8f0; }
-        .media-container iframe, .media-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+        .media-container iframe, .media-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
 
         .follow-notice-box { 
             background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; 
@@ -47,7 +47,7 @@
             color: #ffffff; text-decoration: none; font-size: 1.4rem; 
             transition: transform 0.2s, box-shadow 0.2s; 
         }
-        .social-icon-btn:hover { transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+        .social-icon-btn:hover { transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); color: white;}
         
         .btn-facebook { background: #1877f2; }
         .btn-whatsapp { background: #25d366; }
@@ -66,13 +66,13 @@
 
     <header>
         <div class="header-container">
-            <img src="/ROCK C MEDIA SOLUTION NEW LOGO.png" alt="ROCK-C Media" class="logo">
+            <img src="/ROCK C MEDIA SOLUTION NEW LOGO.png" alt="ROCK-C Media" class="logo" onerror="this.src='ROCK C MEDIA SOLUTION NEW LOGO.png'">
             <div class="header-title">समाचार शाखा</div>
         </div>
     </header>
 
     <main class="detail-container">
-        <a href="/news.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> सबै हेडलाइनहरू</a>
+        <a href="index.html#news" class="back-btn"><i class="fa-solid fa-arrow-left"></i> सबै हेडलाइनहरू</a>
         
         <div class="main-card" id="main-content">
             <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> समाचार लोड हुँदैछ...</p>
@@ -83,7 +83,6 @@
         const SPREADSHEET_ID = '1fzL5DzEemQ_BTQgkHFLaCG-7ZjQlEFknZw5SN44gm-Q';
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv`;
 
-        // पुरानो (?id=11) र नयाँ (/news/11) दुवै तरिकाले आइडी तान्ने मजबुत कोड
         const urlParams = new URLSearchParams(window.location.search);
         let idString = urlParams.get('id');
 
@@ -111,14 +110,14 @@
                 download: true,
                 header: false,
                 complete: function(results) {
-                    const rows = results.data;
+                    const rows = results.data.filter(row => row.length > 1); // खाली लाइनहरू हटाउन
 
                     if (isNaN(newsId) || newsId >= rows.length || !rows[newsId]) {
-                        container.innerHTML = '<p class="loading-text" style="color:red;">समाचार भेटिएन।</p>';
+                        container.innerHTML = '<p class="loading-text" style="color:red;">माफ गर्नुहोला, समाचार भेटिएन।</p>';
                         return;
                     }
 
-                    const currentNews = rows[rows.length - 1 - (rows.length - 1 - newsId)]; 
+                    // तपाईंको डेटाबेसको डिजाइनअनुसार डेटा तान्ने
                     const date = rows[newsId][0] ? rows[newsId][0].trim() : '';
                     const title = rows[newsId][1] ? rows[newsId][1].trim() : '';
                     const desc = rows[newsId][2] ? rows[newsId][2].trim() : '';
@@ -128,4 +127,42 @@
                     if (mediaLink) {
                         const ytId = getYouTubeId(mediaLink);
                         if (ytId) {
-                            mediaHtml = `<div class="media-container"><iframe src="https://www
+                            // यदि युट्युब भिडियो हो भने
+                            mediaHtml = `<div class="media-container"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe></div>`;
+                        } else {
+                            // यदि फोटो हो भने
+                            mediaHtml = `<div class="media-container"><img src="${mediaLink}" alt="News Media"></div>`;
+                        }
+                    }
+
+                    // सेयर गर्नको लागि पेजको लिंक र टाइटल
+                    const currentUrl = encodeURIComponent(window.location.href);
+                    const shareTitle = encodeURIComponent(title);
+
+                    // HTML बनाएर देखाउने
+                    container.innerHTML = `
+                        ${mediaHtml}
+                        <span class="news-date"><i class="fa-regular fa-calendar-days"></i> ${date}</span>
+                        <h1>${title}</h1>
+                        <div class="news-content">${desc}</div>
+
+                        <div class="follow-notice-box">
+                            <p>यो समाचार सेयर गर्नुहोस्:</p>
+                            <div class="social-icons-row">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=${currentUrl}" target="_blank" class="social-icon-btn btn-facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="https://api.whatsapp.com/send?text=${shareTitle} %0A%0A ${currentUrl}" target="_blank" class="social-icon-btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    `;
+                },
+                error: function(error) {
+                    container.innerHTML = '<p class="loading-text" style="color:red;">इन्टरनेट कनेक्सन वा डेटाबेसमा समस्या भयो।</p>';
+                }
+            });
+        }
+
+        // यो कोडले पेज लोड हुने बित्तिकै माथिको फङ्सनलाई चलाउँछ
+        document.addEventListener('DOMContentLoaded', loadNewsDetail);
+    </script>
+</body>
+</html>
