@@ -1,94 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>समाचार विवरण - ROCK-C Media</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', Arial, sans-serif; }
-        body { background: #f4f6f9; color: #2c3e50; line-height: 1.6; }
-        
-        header { 
-            background: #ffffff; padding: 15px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-            border-bottom: 3px solid #ffd700; position: sticky; top: 0; z-index: 100;
-        }
-        .header-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .logo { max-width: 140px; width: 100%; height: auto; }
-        .header-title { font-size: 1.5rem; font-weight: 700; color: #111; border-left: 3px solid #ffd700; padding-left: 15px; text-transform: uppercase; }
-
-        .back-btn { display: inline-block; margin: 20px 0; padding: 10px 20px; background: #ffffff; color: #333; text-decoration: none; border-radius: 5px; border: 1px solid #ccc; font-weight: 600; transition: 0.3s; }
-        .back-btn:hover { background: #ffd700; color: #000; border-color: #ffd700; }
-
-        .detail-container { max-width: 850px; margin: 0 auto; padding: 0 20px 50px 20px; }
-        .main-card { background: #ffffff; padding: 30px; border-radius: 10px; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        
-        .news-date { color: #7f8c8d; font-size: 0.9rem; margin-bottom: 12px; display: block; font-weight: 500; }
-        .main-card h1 { color: #111; font-size: 2.2rem; margin-bottom: 25px; line-height: 1.4; font-weight: 700; }
-        .news-content { color: #333; font-size: 1.15rem; margin-bottom: 35px; white-space: pre-wrap; text-align: justify; line-height: 1.8; }
-        
-        .media-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 30px; background: #f0f0f0; border: 1px solid #e2e8f0; }
-        .media-container iframe, .media-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
-
-        /* 🌟 नयाँ र आधुनिक सोसल मिडिया आइकन बक्स स्टाइल */
-        .follow-notice-box { 
-            background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; 
-            padding: 25px 20px; margin: 40px 0; text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
-        .follow-notice-box p { font-weight: 600; color: #334155; margin-bottom: 20px; font-size: 1.05rem; }
-        
-        .social-icons-row { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .social-icon-btn { 
-            display: flex; align-items: center; justify-content: center;
-            width: 48px; height: 48px; border-radius: 50%; 
-            color: #ffffff; text-decoration: none; font-size: 1.4rem; 
-            transition: transform 0.2s, box-shadow 0.2s; 
-        }
-        /* होभर गर्दा माथि सर्ने र हल्का चमक आउने इफेक्ट */
-        .social-icon-btn:hover { transform: translateY(-4px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
-        
-        /* ब्राण्ड अनुसारको रङ्गहरू */
-        .btn-facebook { background: #1877f2; }
-        .btn-whatsapp { background: #25d366; }
-        .btn-email { background: #ea4335; }
-        .btn-youtube { background: #ff0000; }
-
-        /* सुझाव खण्ड स्टाइल */
-        .suggestions-section { margin-top: 40px; border-top: 2px solid #e2e8f0; padding-top: 25px; }
-        .suggestions-section h3 { color: #111; font-size: 1.4rem; margin-bottom: 15px; border-left: 4px solid #b8860b; padding-left: 10px; }
-        .suggested-item { display: block; color: #4a5568; text-decoration: none; padding: 12px 0; border-bottom: 1px dashed #e2e8f0; font-size: 1.1rem; font-weight: 500; transition: 0.2s; }
-        .suggested-item:hover { color: #b8860b; padding-left: 8px; background: rgba(0,0,0,0.01); }
-
-        .loading-text { text-align: center; color: #7f8c8d; padding: 50px; }
-    </style>
-</head>
-<body>
-
-    <header>
-        <div class="header-container">
-            <img src="ROCK C MEDIA SOLUTION NEW LOGO.png" alt="ROCK-C Media" class="logo">
-            <div class="header-title">समाचार शाखा</div>
-        </div>
-    </header>
-
-    <main class="detail-container">
-        <a href="news.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> सबै हेडलाइनहरू</a>
-        
-        <div class="main-card" id="main-content">
-            <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> समाचार लोड हुँदैछ...</p>
-        </div>
-    </main>
-
-    <script>
+<script>
         const SPREADSHEET_ID = '1fzL5DzEemQ_BTQgkHFLaCG-7ZjQlEFknZw5SN44gm-Q';
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv`;
 
+        // 🔥 नयाँ जादु: यसले पुरानो (?id=11) र नयाँ (/news/11) दुवै लिङ्कबाट आइडी तान्छ
         const urlParams = new URLSearchParams(window.location.search);
-        const newsId = parseInt(urlParams.get('id'));
+        let idString = urlParams.get('id');
+        
+        // यदि ?id भेटिएन भने, नयाँ छोटो लिङ्कबाट तान्ने
+        if (!idString) {
+            const pathParts = window.location.pathname.split('/');
+            idString = pathParts[pathParts.length - 1]; 
+        }
+        
+        const newsId = parseInt(idString);
 
         function getYouTubeId(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -110,7 +34,7 @@
                         return;
                     }
 
-                    const currentNews = rows[rows.length - 1 - (rows.length - 1 - newsId)]; // Safe row retrieval
+                    const currentNews = rows[rows.length - 1 - (rows.length - 1 - newsId)]; 
                     const date = rows[newsId][0] ? rows[newsId][0].trim() : '';
                     const title = rows[newsId][1] ? rows[newsId][1].trim() : '';
                     const desc = rows[newsId][2] ? rows[newsId][2].trim() : '';
@@ -133,13 +57,13 @@
                         if (i === newsId) continue;
                         const row = rows[i];
                         if (row && row[1] && row[1].trim()) {
-                            suggestionsHtml += `<a href="news-detail.html?id=${i}" class="suggested-item"><i class="fa-solid fa-chevron-right" style="font-size:0.7rem; color:#b8860b;"></i> ${row[1].trim()}</a>`;
+                            // 🔥 यहाँ पनि 'यो पनि पढ्नुहोस' मा नयाँ छोटो लिङ्क (/news/) राखिएको छ 
+                            suggestionsHtml += `<a href="/news/${i}" class="suggested-item"><i class="fa-solid fa-chevron-right" style="font-size:0.7rem; color:#b8860b;"></i> ${row[1].trim()}</a>`;
                             count++;
                             if (count >= 4) break; 
                         }
                     }
 
-                    // बक्स भित्र केवल प्रिमियम आइकन बटनहरू मात्र इन्जेक्सन गरिएको छ
                     container.innerHTML = `
                         <span class="news-date"><i class="fa-regular fa-clock"></i> ${date}</span>
                         <h1>${title}</h1>
@@ -170,5 +94,3 @@
         }
         document.addEventListener('DOMContentLoaded', loadNewsDetail);
     </script>
-</body>
-</html>
