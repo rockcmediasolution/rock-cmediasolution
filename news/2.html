@@ -8,6 +8,7 @@
 
     <meta property="og:title" content="गायक गणेश अधिकारी र गायिका देवी घर्ती मगरको नयाँ गीत “म यसै खुसी छु” सार्वजनिक, एकै दिनमा लाख बढी भ्युज">
     <meta property="og:description" content="गायक गणेश अधिकारी र गायिका देवी घर्ती मगरको नयाँ गीत “म यसै खुसी छु” सार्वजनिक, एकै दिनमा लाख बढी भ्युज">
+    
     <meta property="og:image" content="https://rockcmediasolution.github.io/rock-cmediasolution/तपाईंको-फोटोको-नाम.jpg">
     <meta property="og:type" content="article">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -25,7 +26,8 @@
         .main-card h1 { color: #111; font-size: 2.2rem; margin-bottom: 25px; line-height: 1.4; font-weight: 700;}
         .news-content { font-size: 1.15rem; color: #333; white-space: pre-wrap; text-align: justify; }
         
-        .media-container { margin-bottom: 20px; border-radius: 8px; overflow: hidden; background: #000;}
+        /* मिडिया कन्टेनर (फोटो र भिडियोको लागि) */
+        .media-container { margin-bottom: 20px; border-radius: 8px; overflow: hidden; background: #000; display: flex; justify-content: center; align-items: center;}
         .media-container img { width: 100%; height: auto; display: block;}
         .media-container iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block;}
         
@@ -35,7 +37,7 @@
         /* फ्लो बक्स र सोसल मिडिया डिजाइन */
         .follow-notice-box { 
             background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; 
-            padding: 25px 20px; margin: 40px 0; text-align: center;
+            padding: 25px 20px; margin: 40px 0 10px 0; text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
         .follow-notice-box p { font-weight: 600; color: #334155; margin-bottom: 20px; font-size: 1.05rem; }
@@ -46,7 +48,6 @@
             color: #ffffff; text-decoration: none; font-size: 1.4rem; 
         }
         
-        /* बाउन्सिङ एनिमेसन (Bouncing Animation) */
         @keyframes gentleBounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
@@ -57,13 +58,6 @@
         .btn-facebook { background: #1877f2; animation-delay: 0s; }
         .btn-whatsapp { background: #25d366; animation-delay: 0.2s; }
         .btn-youtube { background: #ff0000; animation-delay: 0.4s; }
-
-        /* 'यो पनि पढ्नुहोस्' सेक्सन */
-        .suggestions-section { margin-top: 40px; border-top: 2px solid #e2e8f0; padding-top: 25px; }
-        .suggestions-section h3 { color: #111; font-size: 1.4rem; margin-bottom: 15px; border-left: 4px solid #ffd700; padding-left: 10px; }
-        .suggested-item { display: block; color: #4a5568; text-decoration: none; padding: 12px 0; border-bottom: 1px dashed #e2e8f0; font-size: 1.1rem; font-weight: 500; transition: 0.2s; }
-        .suggested-item i { color: #ffd700; margin-right: 5px; }
-        .suggested-item:hover { color: #b8860b; padding-left: 8px; background: rgba(0,0,0,0.01); }
     </style>
 </head>
 <body>
@@ -77,26 +71,18 @@
         
         <div class="main-card">
             
-            <div class="media-container">
-                <img src="https://youtu.be/CRznYOVTJgU?si=LVtWpWgOjjf2n5IY" alt="News Image">
-            </div>
+            <div class="media-container" id="media-box" data-url="https://img.youtube.com/vi/CRznYOVTJgU/maxresdefault.jpg">
+                </div>
 
             <span class="news-date"><i class="fa-regular fa-calendar-days"></i> २०८३ जेठ ३० गते</span>
             
-            <h1>डगायक गणेश अधिकारी र गायिका देवी घर्ती मगरको नयाँ गीत “म यसै खुसी छु” सार्वजनिक, एकै दिनमा लाख बढी भ्युज</h1>
+            <h1>गायक गणेश अधिकारी र गायिका देवी घर्ती मगरको नयाँ गीत “म यसै खुसी छु” सार्वजनिक, एकै दिनमा लाख बढी भ्युज</h1>
             
-            <div class="news-content">२८ जेठ २०८३, बिहीबार। नेपाली सांगीतिक क्षेत्रमा आफ्नै छुट्टै पहिचान बनाउन सफल आदरणीय गायक तथा सर्जक गणेश अधिकारी र सम्माननीय गायिका देवी घर्ती मगरको सुमधुर आवाजमा सजिएको नयाँ सांगीतिक कोशेली “म यसै खुसी छु” बजारमा सार्वजनिक भएको छ।
-सृष्टि अधिकारी (Srishti Adhikari) को पहिलो 'मेन लिड' (Main Lead) अभिनय रहेको यस म्युजिक भिडियोले रिलिज हुनासाथ दर्शकको निकै राम्रो साथ पाएको छ। भिडियोले सार्वजनिक भएको मात्र एक दिनमा युट्युब (YouTube) मा एक लाखभन्दा बढी भ्युज (Views) प्राप्त गर्न सफल भएको छ। यति छोटो समयमा दर्शक–श्रोताको अपार माया पाउनुले गीतको गुणस्तर र सम्पूर्ण निर्माण टोलीको मेहनतलाई प्रमाणित गरेको छ।
-
-म्युजिक भिडियोमा नवनायिका सृष्टिको अभिनय निकै जीवन्त र मन छुने रहेको छ, जसले उनको आगामी अभिनय यात्रा निकै उज्ज्वल र उचाइले भरिपूर्ण हुने प्रष्ट संकेत गरेको छ। सामाजिक सञ्जालमा चौतर्फी रूपमा गीत र अभिनयको प्रशंसा भइरहेको छ।
-
-दर्शक तथा संगीत प्रेमीहरूको यो उत्साहजनक प्रतिक्रियाले “म यसै खुसी छु” गीत चाँडै नै 'करोड क्लब' मा पुग्ने विश्वास गरिएको छ। नेपाली सांगीतिक बजारमा एउटा उत्कृष्ट कोसेली थपेको भन्दै सम्पूर्ण टिमलाई बधाई तथा थप सफलताको शुभकामना ब्यक्त भइरहेको छ।
-
-आधिकारिक भिडियो हेर्नका लागि तलको लिङ्कमा क्लिक गर्नुहोस्:
-https://youtu.be/CRznYOVTJgU?si=LVtWpWgOjjf2n5IY ।</div>
+            <div class="news-content">यहाँ तपाईंको समाचारको पूरा विवरण लेख्नुहोस्। 
+तपाईंले यहाँ जति लामो प्याराग्राफ पनि राख्न सक्नुहुन्छ।</div>
 
             <div class="follow-notice-box">
-                <p>सूचना, मनोरञ्जन र डिजिटल सेवाका लागि ROCK C Media Solution लाई Follow गर्न नभुल्नुहोस्।</p>
+                <p>सूचना, मनोरञ्जन र डिजिटल सेवाका लागि ROCK-C Media Solution लाई Follow गर्न नभुल्नुहोस्।</p>
                 <div class="social-icons-row">
                     <a href="https://www.facebook.com/Rockcmedia" target="_blank" class="social-icon-btn btn-facebook"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="https://wa.me/9779811661522" target="_blank" class="social-icon-btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
@@ -104,15 +90,31 @@ https://youtu.be/CRznYOVTJgU?si=LVtWpWgOjjf2n5IY ।</div>
                 </div>
             </div>
 
-            <div class="suggestions-section">
-                <h3>यो पनि पढ्नुहोस्</h3>
-                <a href="2.html" class="suggested-item"><i class="fa-solid fa-angle-right"></i> पुरानो समाचारको हेडलाइन यहाँ लेख्नुहोस्</a>
-                <a href="3.html" class="suggested-item"><i class="fa-solid fa-angle-right"></i> अर्को पुरानो समाचारको हेडलाइन यहाँ लेख्नुहोस्</a>
-                <a href="4.html" class="suggested-item"><i class="fa-solid fa-angle-right"></i> अर्को समाचारको हेडलाइन यहाँ लेख्नुहोस्</a>
-            </div>
-
         </div>
     </main>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mediaBox = document.getElementById('media-box');
+            const mediaUrl = mediaBox.getAttribute('data-url').trim();
+
+            if (mediaUrl && mediaUrl !== "तपाईंको_युट्युब_वा_फोटोको_लिङ्क_यहाँ_राख्नुहोस्") {
+                // युट्युब आइडी (YouTube ID) निकाल्ने फङ्सन
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                const match = mediaUrl.match(regExp);
+                const ytId = (match && match[2].length === 11) ? match[2] : null;
+
+                if (ytId) {
+                    // यदि युट्युबको लिङ्क हो भने
+                    mediaBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}" allowfullscreen></iframe>`;
+                } else {
+                    // यदि फोटोको लिङ्क हो भने
+                    mediaBox.innerHTML = `<img src="${mediaUrl}" alt="News Image">`;
+                }
+            } else {
+                mediaBox.style.display = "none"; // लिङ्क नराखेको खण्डमा बक्स लुकाउने
+            }
+        });
+    </script>
 </body>
 </html>
