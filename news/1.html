@@ -8,7 +8,6 @@
 
     <meta property="og:title" content="डिजिटल सेवामा नयाँ फड्को: 'Rock-C Media Solution' आधिकारिक रूपमा सञ्चालनमा">
     <meta property="og:description" content="डिजिटल सेवामा नयाँ फड्को: 'Rock-C Media Solution' आधिकारिक रूपमा सञ्चालनमा">
-    
     <meta property="og:image" content="https://rockcmediasolution.github.io/rock-cmediasolution/तपाईंको-फोटोको-नाम.jpg">
     <meta property="og:type" content="article">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -21,14 +20,50 @@
         .logo { max-width: 140px; }
         .detail-container { max-width: 850px; margin: 30px auto; padding: 0 20px; }
         .main-card { background: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; }
+        
         .news-date { color: #7f8c8d; font-size: 0.9rem; margin-bottom: 12px; display: block; font-weight: 500; }
         .main-card h1 { color: #111; font-size: 2.2rem; margin-bottom: 25px; line-height: 1.4; font-weight: 700;}
         .news-content { font-size: 1.15rem; color: #333; white-space: pre-wrap; text-align: justify; }
+        
         .media-container { margin-bottom: 20px; border-radius: 8px; overflow: hidden; background: #000;}
         .media-container img { width: 100%; height: auto; display: block;}
         .media-container iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block;}
+        
         .back-btn { display: inline-block; margin-bottom: 20px; padding: 10px 20px; background: #fff; border: 1px solid #ccc; text-decoration: none; color: #333; border-radius: 5px; font-weight: 600; transition: 0.3s;}
         .back-btn:hover { background: #ffd700; border-color: #ffd700;}
+
+        /* फ्लो बक्स र सोसल मिडिया डिजाइन */
+        .follow-notice-box { 
+            background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; 
+            padding: 25px 20px; margin: 40px 0; text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .follow-notice-box p { font-weight: 600; color: #334155; margin-bottom: 20px; font-size: 1.05rem; }
+        .social-icons-row { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .social-icon-btn { 
+            display: flex; align-items: center; justify-content: center;
+            width: 48px; height: 48px; border-radius: 50%; 
+            color: #ffffff; text-decoration: none; font-size: 1.4rem; 
+        }
+        
+        /* बाउन्सिङ एनिमेसन (Bouncing Animation) */
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .social-icon-btn { animation: gentleBounce 2s infinite ease-in-out; }
+        .social-icon-btn:hover { animation-play-state: paused; opacity: 0.9; }
+
+        .btn-facebook { background: #1877f2; animation-delay: 0s; }
+        .btn-whatsapp { background: #25d366; animation-delay: 0.2s; }
+        .btn-youtube { background: #ff0000; animation-delay: 0.4s; }
+
+        /* 'यो पनि पढ्नुहोस्' सेक्सन */
+        .suggestions-section { margin-top: 40px; border-top: 2px solid #e2e8f0; padding-top: 25px; }
+        .suggestions-section h3 { color: #111; font-size: 1.4rem; margin-bottom: 15px; border-left: 4px solid #ffd700; padding-left: 10px; }
+        .suggested-item { display: block; color: #4a5568; text-decoration: none; padding: 12px 0; border-bottom: 1px dashed #e2e8f0; font-size: 1.1rem; font-weight: 500; transition: 0.2s; }
+        .suggested-item i { color: #ffd700; margin-right: 5px; }
+        .suggested-item:hover { color: #b8860b; padding-left: 8px; background: rgba(0,0,0,0.01); }
     </style>
 </head>
 <body>
@@ -43,11 +78,10 @@
         <div class="main-card">
             
             <div class="media-container">
-                <img src="https://www.facebook.com/photo/?fbid=1073702038104952&set=a.449148320560330" alt="News Image">
-                
-                </div>
+                <img src="तपाईंको-फोटोको-लिङ्क-यहाँ-राख्नुहोस्.jpg" alt="News Image">
+            </div>
 
-            <span class="news-date"><i class="fa-regular fa-calendar-days"></i> तपाईंको मिति यहाँ लेख्नुहोस्</span>
+            <span class="news-date"><i class="fa-regular fa-calendar-days"></i> २०८३ जेठ ३० गते</span>
             
             <h1>डिजिटल सेवामा नयाँ फड्को: 'Rock-C Media Solution' आधिकारिक रूपमा सञ्चालनमा</h1>
             
@@ -71,6 +105,22 @@ Rock-C Media Solution का प्रमुख सेवाहरू यस प
 
 कम्पनीका अनुसार बजारको माग र प्रविधिको विकाससँगै आगामी दिनहरूमा ग्राहकका लागि अन्य थप आकर्षक र उपयोगी सुविधाहरू पनि थपिँदै लगिनेछ। आफूलाई आवश्यक परेको कुनै पनि सेवा ढुक्कसँग र किफायती मूल्यमा लिनका लागि कम्पनीले सम्पूर्ण सेवाग्राहीहरूमा हार्दिक आह्वान गरेको छ।
 ।</div>
+
+            <div class="follow-notice-box">
+                <p>सूचना, मनोरञ्जन र डिजिटल सेवाका लागि ROCK C Media Solution लाई Follow गर्न नभुल्नुहोस्।</p>
+                <div class="social-icons-row">
+                    <a href="https://www.facebook.com/Rockcmedia" target="_blank" class="social-icon-btn btn-facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://wa.me/9779811661522" target="_blank" class="social-icon-btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="https://www.youtube.com/@Rock-CMediaSolution" target="_blank" class="social-icon-btn btn-youtube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="suggestions-section">
+                <h3>यो पनि पढ्नुहोस्</h3>
+                <a href="2.html" class="suggested-item"><i class="fa-solid fa-angle-right"></i> पुरानो समाचारको हेडलाइन यहाँ लेख्नुहोस्</a>
+                <a href="3.html" class="suggested-item"><i class="fa-solid fa-angle-right"></i> अर्को पुरानो समाचारको हेडलाइन यहाँ लेख्नुहोस्</a>
+                <a href="4.html" class="suggested-item"><i class="fa-solid fa-angle-right"></i> अर्को समाचारको हेडलाइन यहाँ लेख्नुहोस्</a>
+            </div>
 
         </div>
     </main>
